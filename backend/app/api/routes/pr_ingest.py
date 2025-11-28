@@ -1,5 +1,6 @@
 # from unittest import result
 # from unidiff
+import json
 from fastapi import APIRouter,HTTPException
 from app.models.model import Input
 from uuid import uuid4
@@ -17,7 +18,7 @@ async def ingest(input:Input):
     run_id: str = str(uuid4())
     try:
         result_1 = git_clone(f"https://github.com/{owner_name}/{repo_name}.git",f"{backed_dir}/runs/{run_id}/repo")
-        # print(result_1)
+        print(f"result1:{result_1}")
 
     except Exception as e:
         print("Error during git clone:",e)
@@ -46,10 +47,12 @@ async def ingest(input:Input):
         print("Error generating diff:", e)
     
     try:
-        file_changes = parse_diff_to_json(diff_output['diff'],f"{backed_dir}/runs/{run_id}/")
+        file_changes = parse_diff_to_json(diff_output['diff'],f"{backed_dir}/runs/{run_id}/repo")
     except Exception as e:
         print("Error parsing diff to JSON:", e)
 
+    with open(f"{backed_dir}/runs/{run_id}/changed_files.json","w",encoding="utf-8") as f:
+        json.dump(file_changes,f,indent=4)
 
     return {
         "run_id":run_id,
