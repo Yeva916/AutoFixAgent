@@ -19,4 +19,8 @@ async def analysis(run_id: uuid.UUID):
         diagnostics = static_analysis(repo_path, None)
     with open(f"{backed_dir}/runs/{run_id}/diagnostics.json","w",encoding="utf-8") as f:
         json.dump(diagnostics,f,indent=4)
-    return {"run_id": run_id, "status": "analysis completed"}
+    sev_count = {"error":0,"warning":0}
+    for diag in diagnostics:
+        sev_count[diag["severity"]] += 1
+    #print(f"Static analysis completed: {diag_count} issues found ({sev_count['error']} errors, {sev_count['warning']} warnings).")
+    return {"run_id": run_id,"status": "analysis completed","sevirity_count": sev_count,"total_diagnostics": len(diagnostics)}

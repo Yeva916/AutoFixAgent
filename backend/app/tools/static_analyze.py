@@ -1,4 +1,4 @@
-import os
+import os   # bug -> unable to stop __pycache__ analysis
 import subprocess
 import logging
 from typing import Any, Dict, List, Optional
@@ -154,7 +154,7 @@ def static_analysis(repo_path:str,files:Optional[List[str]]) -> List[Dict[str,An
     
     # targets = files if files else ["."]  
     targets = files if files else ["."]
-    print(targets)
+    # print(targets)
 
     diagnostics = []
     diagnostics.extend(parse_flake8(repo_path,targets))
@@ -182,4 +182,3 @@ if __name__ == "__main__":
         # print(f"{diag['tool']}: {diag['file_path']}:{diag['line']}:{diag['col']} {diag['code']} {diag['message']}")
         print(f"{diag['tool']}: {diag['file_path']}:{diag['line']}:{diag['col']} {diag['code']} {diag['message']}")
 
-# bug -> unable to stop __pycache__ analysis
