@@ -37,4 +37,6 @@ ENV/
 *.swp
 
 backend/runs
-test_repos/
+testing.py
+sandbox/scripts/hell.sh
+
